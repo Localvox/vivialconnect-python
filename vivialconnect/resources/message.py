@@ -62,6 +62,16 @@ class Message(Resource, Countable):
         """
         return self.save()
 
+    def save(self):
+        if hasattr(self, "body") and not self.body:
+            del self.body
+        if hasattr(self, "media_urls") and not self.media_urls:
+            del self.media_urls
+        if not getattr(self, "body", None) and not getattr(self, "media_urls", None):
+            raise ValueError("body or media_urls must be specified")
+
+        return super(Message, self).save()
+
     def attachment(self, id, **kwargs):
         """Use this method to view information about a single media attachment
         for a message in your account.

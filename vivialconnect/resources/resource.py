@@ -460,6 +460,13 @@ class Resource(six.with_metaclass(ResourceMeta, object)):
         else:
             object.__setattr__(self, name, value)
 
+    def __delattr__(self, name):
+        if 'attributes' in self.__dict__:
+            if name in self.attributes:
+                del self.attributes[name]
+                return
+        raise AttributeError(name)
+
     def __repr__(self):
         return '%s(%s)' % (self._singular, self.id)
 
